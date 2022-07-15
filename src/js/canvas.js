@@ -42,8 +42,6 @@ class genericObject {
   }
 }
 
-let platformImage = createImage(platformImg);
-
 let player = new Player();
 
 let platforms = [];
@@ -70,8 +68,6 @@ let scrollOffset = 0;
 const init = () => {
   let block = [];
 
-  platformImage = createImage(platformImg);
-
   player = new Player();
   player.animationStates.forEach((state, index) => {
     let frames = {
@@ -88,6 +84,7 @@ const init = () => {
     player.spriteAnimations[state.name] = frames;
   });
 
+  // platforms
   platformsNew = [
     new PlatformNew({
       startingPosX: -50,
@@ -103,27 +100,29 @@ const init = () => {
       framesY: 2,
     }),
 
-    // new PlatformNew({
-    //   startingPosX: 700,
-    //   startingPosY: 750,
-    //   framesX: 7,
-    //   framesY: 2,
-    // }),
+    new PlatformNew({
+      startingPosX: 700,
+      startingPosY: 750,
+      framesX: 7,
+      framesY: 2,
+    }),
 
-    // new PlatformNew({
-    //   startingPosX: 50 * 33,
-    //   startingPosY: 900,
-    //   framesX: 15,
-    //   framesY: 3,
-    // }),
+    new PlatformNew({
+      startingPosX: 50 * 33,
+      startingPosY: 900,
+      framesX: 15,
+      framesY: 3,
+    }),
 
-    // new PlatformNew({
-    //   startingPosX: 50 * 52,
-    //   startingPosY: 800,
-    //   framesX: 30,
-    //   framesY: 5,
-    // }),
+    new PlatformNew({
+      startingPosX: 50 * 52,
+      startingPosY: 800,
+      framesX: 30,
+      framesY: 5,
+    }),
   ];
+
+  // platform generator
 
   platformsNew.forEach((platformNew) => {
     for (let i = 0; i < platformNew.framesX; i++) {
@@ -190,11 +189,12 @@ const init = () => {
       image: createImage(background),
     }),
   ];
-
   scrollOffset = 0;
 };
+
 function animate() {
   platformsNew.forEach((platform) => {
+    // collision detection
     if (
       player.velocity.y > 0 &&
       player.rectPosition.y + player.rectHeight <= platform.platformPositionY &&
@@ -207,33 +207,28 @@ function animate() {
       player.velocity.y = 0;
       player.isJumping = false;
     }
-    if (platform.platformPositionY === 750) {
-      console.log(
-        player.rectPosition.y + player.rectHeight >=
-          platform.platformPositionY &&
-          player.rectPosition.y <=
-            platform.platformPositionY + platform.platformHeight &&
-          player.rectPosition.x + player.rectWidth >= platform.platformPositionX
-      );
-    }
+
+    // TODO: optimize sides collision
     // if (
-    //   player.velocity.x > 0 &&
+    //   keys.right.hold &&
     //   player.rectPosition.y + player.rectHeight >= platform.platformPositionY &&
     //   player.rectPosition.y <=
     //     platform.platformPositionY + platform.platformHeight &&
-    //   player.rectPosition.x + player.rectWidth >= platform.platformPositionX
+    //   player.rectPosition.x + player.rectWidth >= platform.platformPositionX &&
+    //   player.rectPosition.x + player.rectWidth <=
+    //     platform.platformPositionX + platform.platformWidth
     // ) {
-    //   player.velocity.x = 0;
+    //   keys.right.hold = false;
     // }
 
     // if (
-    //   player.velocity.x < 0 &&
+    //   keys.left.hold &&
     //   player.rectPosition.y + player.rectHeight >= platform.platformPositionY &&
     //   player.rectPosition.x <=
     //     platform.platformPositionX + platform.platformWidth &&
     //   player.rectPosition.x >= platform.platformPositionX
     // ) {
-    //   player.velocity.x = 0;
+    //   keys.left.hold = false;
     // }
   });
 
@@ -269,7 +264,7 @@ function animate() {
     player.velocity.x = player.speed;
   } else if (
     (keys.left.hold && player.rectPosition.x > 150) ||
-    (keys.left.hold && scrollOffset === 0 && player.rectPosition.x > 0)
+    (keys.left.hold && scrollOffset === 0 && player.rectPosition.x > 40)
   ) {
     if (!player.isJumping) {
       player.playerState = "walkReverse";
@@ -326,7 +321,7 @@ const myTimeout = () => {
 };
 
 addEventListener("keydown", ({ code }) => {
-  // console.log(code);
+  console.log(code);
   switch (code) {
     // movement controls
 

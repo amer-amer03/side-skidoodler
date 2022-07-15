@@ -225,7 +225,6 @@ var genericObject = /*#__PURE__*/function () {
   return genericObject;
 }();
 
-var platformImage = Object(_js_utils__WEBPACK_IMPORTED_MODULE_4__["createImage"])(_img_plat_png__WEBPACK_IMPORTED_MODULE_0__["default"]);
 var player = new _character__WEBPACK_IMPORTED_MODULE_2__["default"]();
 var platforms = [];
 var platformsNew = [];
@@ -249,7 +248,6 @@ var scrollOffset = 0;
 
 var init = function init() {
   var block = [];
-  platformImage = Object(_js_utils__WEBPACK_IMPORTED_MODULE_4__["createImage"])(_img_plat_png__WEBPACK_IMPORTED_MODULE_0__["default"]);
   player = new _character__WEBPACK_IMPORTED_MODULE_2__["default"]();
   player.animationStates.forEach(function (state, index) {
     var frames = {
@@ -269,7 +267,8 @@ var init = function init() {
     }
 
     player.spriteAnimations[state.name] = frames;
-  });
+  }); // platforms
+
   platformsNew = [new _platform__WEBPACK_IMPORTED_MODULE_3__["default"]({
     startingPosX: -50,
     startingPosY: 900,
@@ -280,25 +279,23 @@ var init = function init() {
     startingPosY: 750,
     framesX: 7,
     framesY: 2
-  }) // new PlatformNew({
-  //   startingPosX: 700,
-  //   startingPosY: 750,
-  //   framesX: 7,
-  //   framesY: 2,
-  // }),
-  // new PlatformNew({
-  //   startingPosX: 50 * 33,
-  //   startingPosY: 900,
-  //   framesX: 15,
-  //   framesY: 3,
-  // }),
-  // new PlatformNew({
-  //   startingPosX: 50 * 52,
-  //   startingPosY: 800,
-  //   framesX: 30,
-  //   framesY: 5,
-  // }),
-  ];
+  }), new _platform__WEBPACK_IMPORTED_MODULE_3__["default"]({
+    startingPosX: 700,
+    startingPosY: 750,
+    framesX: 7,
+    framesY: 2
+  }), new _platform__WEBPACK_IMPORTED_MODULE_3__["default"]({
+    startingPosX: 50 * 33,
+    startingPosY: 900,
+    framesX: 15,
+    framesY: 3
+  }), new _platform__WEBPACK_IMPORTED_MODULE_3__["default"]({
+    startingPosX: 50 * 52,
+    startingPosY: 800,
+    framesX: 30,
+    framesY: 5
+  })]; // platform generator
+
   platformsNew.forEach(function (platformNew) {
     for (var i = 0; i < platformNew.framesX; i++) {
       for (var j = 0; j < platformNew.framesY; j++) {
@@ -369,30 +366,30 @@ var init = function init() {
 
 function animate() {
   platformsNew.forEach(function (platform) {
+    // collision detection
     if (player.velocity.y > 0 && player.rectPosition.y + player.rectHeight <= platform.platformPositionY && player.rectPosition.y + player.rectHeight + player.velocity.y >= platform.platformPositionY && player.rectPosition.x + player.rectWidth >= platform.platformPositionX && player.rectPosition.x <= platform.platformPositionX + platform.platformWidth) {
       player.velocity.y = 0;
       player.isJumping = false;
-    }
-
-    if (platform.platformPositionY === 750) {
-      console.log(player.rectPosition.y + player.rectHeight >= platform.platformPositionY && player.rectPosition.y <= platform.platformPositionY + platform.platformHeight && player.rectPosition.x + player.rectWidth >= platform.platformPositionX);
-    } // if (
-    //   player.velocity.x > 0 &&
+    } // TODO: optimize sides collision
+    // if (
+    //   keys.right.hold &&
     //   player.rectPosition.y + player.rectHeight >= platform.platformPositionY &&
     //   player.rectPosition.y <=
     //     platform.platformPositionY + platform.platformHeight &&
-    //   player.rectPosition.x + player.rectWidth >= platform.platformPositionX
+    //   player.rectPosition.x + player.rectWidth >= platform.platformPositionX &&
+    //   player.rectPosition.x + player.rectWidth <=
+    //     platform.platformPositionX + platform.platformWidth
     // ) {
-    //   player.velocity.x = 0;
+    //   keys.right.hold = false;
     // }
     // if (
-    //   player.velocity.x < 0 &&
+    //   keys.left.hold &&
     //   player.rectPosition.y + player.rectHeight >= platform.platformPositionY &&
     //   player.rectPosition.x <=
     //     platform.platformPositionX + platform.platformWidth &&
     //   player.rectPosition.x >= platform.platformPositionX
     // ) {
-    //   player.velocity.x = 0;
+    //   keys.left.hold = false;
     // }
 
   });
@@ -426,7 +423,7 @@ function animate() {
     }
 
     player.velocity.x = player.speed;
-  } else if (keys.left.hold && player.rectPosition.x > 150 || keys.left.hold && scrollOffset === 0 && player.rectPosition.x > 0) {
+  } else if (keys.left.hold && player.rectPosition.x > 150 || keys.left.hold && scrollOffset === 0 && player.rectPosition.x > 40) {
     if (!player.isJumping) {
       player.playerState = "walkReverse";
     }
@@ -486,8 +483,8 @@ var myTimeout = function myTimeout() {
 
 addEventListener("keydown", function (_ref3) {
   var code = _ref3.code;
+  console.log(code);
 
-  // console.log(code);
   switch (code) {
     // movement controls
     case "KeyA":
@@ -804,20 +801,6 @@ var PlatformNew = /*#__PURE__*/function () {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createImage", function() { return createImage; });
-function randomIntFromRange(min, max) {
-  return Math.floor(Math.random() * (max - min + 1) + min);
-}
-
-function randomColor(colors) {
-  return colors[Math.floor(Math.random() * colors.length)];
-}
-
-function distance(x1, y1, x2, y2) {
-  var xDist = x2 - x1;
-  var yDist = y2 - y1;
-  return Math.sqrt(Math.pow(xDist, 2) + Math.pow(yDist, 2));
-}
-
 var createImage = function createImage(imageSrc) {
   var image = new Image();
   image.src = imageSrc;
