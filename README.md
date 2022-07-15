@@ -1,4 +1,4 @@
-Yarn i 
+Yarn
 
 Yarn start
 
