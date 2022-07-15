@@ -1,4 +1,4 @@
-Project setup:
+## Project setup:
 
 git clone https://github.com/amer-amer03/side-skidoodler
 
@@ -6,7 +6,7 @@ Yarn
 
 Yarn start
 
-Controls:
+## Controls:
 
 WASD - movement
 
