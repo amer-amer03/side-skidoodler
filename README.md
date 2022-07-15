@@ -1,0 +1,3 @@
+Yarn i 
+
+Yarn start
